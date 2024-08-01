@@ -1,7 +1,3 @@
-Certainly! Here's an updated version of the README:
-
----
-
 # Building an Interpreter and Compiler for the Monkey Language
 
 This project is based on my learnings from Thorsten Ball's books, "Writing An Interpreter in Go" and "Writing A Compiler in Go". It involves creating both an interpreter and a compiler for a simple programming language called Monkey. The interpreter directly executes the source code, while the compiler translates it into an intermediate representation that can be executed by a virtual machine.
