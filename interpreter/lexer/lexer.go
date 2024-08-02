@@ -38,7 +38,7 @@ func (l *Lexer) NextToken() token.Token {
 	l.eatWhitespace()
 	switch l.ch {
 	case '=':
-		// here for two char tokens we peek the next char to decide what to do 
+		// here for two char tokens we peek the next char to decide what to do
 		if l.peekChar() == '=' {
 			ch := l.ch
 			l.readChar()
