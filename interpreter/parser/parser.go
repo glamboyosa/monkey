@@ -5,20 +5,21 @@ import (
 	"interpreter/lexer"
 	"interpreter/token"
 )
+
 type Parser struct {
-	l *lexer.Lexer
-	curToken token.Token
+	l         *lexer.Lexer
+	curToken  token.Token
 	peekToken token.Token
 }
 
-func New(l *lexer.Lexer) *Parser  {
+func New(l *lexer.Lexer) *Parser {
 	p := &Parser{l: l}
 	// read two tokens so curToken and peekToken are both set with tokens
 	p.nextToken()
 	p.nextToken()
 	return p
 }
-func (p *Parser) nextToken()  {
+func (p *Parser) nextToken() {
 	p.curToken = p.peekToken
 	p.peekToken = p.l.NextToken()
 }
@@ -35,7 +36,8 @@ func (p *Parser) ParseProgram() *ast.Program {
 	}
 	return program
 }
-// helper to parse statements 
+
+// helper to parse statements
 func (p *Parser) parseStatement() ast.Statement {
 	switch p.curToken.Type {
 	case token.LET:
@@ -43,43 +45,43 @@ func (p *Parser) parseStatement() ast.Statement {
 	default:
 		return nil
 	}
-	
+
 }
 
-func (p *Parser) parseLetStatement() ast.Statement  {
+func (p *Parser) parseLetStatement() ast.Statement {
 	stmt := &ast.LetStatement{Token: p.curToken}
 	// idea here is after let nexrt should be an identifier
 	// as in let x = 20
 	if !p.expectPeek(token.IDENT) {
 		return nil
 	}
-	// save the name of the identifier i.e. x 
+	// save the name of the identifier i.e. x
 	stmt.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
 	if !p.expectPeek(token.ASSIGN) {
-        return nil
-    }
+		return nil
+	}
 
-    // TODO: We're skipping the expressions until we
-    // encounter a semicolon
-    for !p.curTokenIs(token.SEMICOLON) {
-        p.nextToken()
-    }
+	// TODO: We're skipping the expressions until we
+	// encounter a semicolon
+	for !p.curTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
 
-    return stmt
+	return stmt
 }
 func (p *Parser) curTokenIs(t token.TokenType) bool {
-    return p.curToken.Type == t
+	return p.curToken.Type == t
 }
 
 func (p *Parser) peekTokenIs(t token.TokenType) bool {
-    return p.peekToken.Type == t
+	return p.peekToken.Type == t
 }
 
 func (p *Parser) expectPeek(t token.TokenType) bool {
-    if p.peekTokenIs(t) {
-        p.nextToken()
-        return true
-    } else {
-        return false
-    }
+	if p.peekTokenIs(t) {
+		p.nextToken()
+		return true
+	} else {
+		return false
+	}
 }
