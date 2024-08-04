@@ -10,7 +10,7 @@ The interpreter serves as the foundation of this project, focusing on parsing an
 
 1. **Abstract Syntax Tree (AST):** The interpreter constructs an AST to represent the structure of the source code, which it walks during execution to evaluate expressions and statements.
 
-2. **Lexical Analysis and Parsing:** The lexer and parser components break down the source code into tokens and then organize these tokens into the AST.
+2. **Lexical Analysis and Parsing:** The lexer and parser components break down the source code into tokens and then organize these tokens into the AST using **Pratt Parsing technique** and a **recursive descent parser**.
 
 3. **Environment Handling:** It includes an environment to manage variables and their values, enabling scoping and closures.
 
