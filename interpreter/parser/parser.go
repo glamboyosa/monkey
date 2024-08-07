@@ -11,7 +11,7 @@ type Parser struct {
 	l         *lexer.Lexer
 	curToken  token.Token
 	peekToken token.Token
-	errors []string
+	errors    []string
 }
 
 func New(l *lexer.Lexer) *Parser {
@@ -58,12 +58,12 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 	stmt := &ast.ReturnStatement{Token: p.curToken}
 	p.nextToken()
 	// TODO: We're skipping the expressions until we
-    // encounter a semicolon
-    for !p.curTokenIs(token.SEMICOLON) {
-        p.nextToken()
-    }
+	// encounter a semicolon
+	for !p.curTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
 	fmt.Print(stmt)
-    return stmt
+	return stmt
 
 }
 
