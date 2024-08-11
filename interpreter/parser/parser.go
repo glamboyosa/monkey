@@ -6,15 +6,16 @@ import (
 	"interpreter/lexer"
 	"interpreter/token"
 )
+
 const (
-    _ int = iota
-    LOWEST
-    EQUALS      // ==
-    LESSGREATER // > or <
-    SUM         // +
-    PRODUCT     // *
-    PREFIX      // -X or !X
-    CALL        // myFunction(X)
+	_ int = iota
+	LOWEST
+	EQUALS      // ==
+	LESSGREATER // > or <
+	SUM         // +
+	PRODUCT     // *
+	PREFIX      // -X or !X
+	CALL        // myFunction(X)
 )
 
 type (
@@ -48,7 +49,7 @@ func New(l *lexer.Lexer) *Parser {
 	return p
 }
 func (p *Parser) parseIdentifier() ast.Expression {
-    return &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+	return &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
 }
 func (p *Parser) Errors() []string {
 	return p.errors
@@ -84,15 +85,15 @@ func (p *Parser) parseStatement() ast.Statement {
 
 }
 func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
-    stmt := &ast.ExpressionStatement{Token: p.curToken}
+	stmt := &ast.ExpressionStatement{Token: p.curToken}
 
-    stmt.Expression = p.parseExpression(LOWEST)
+	stmt.Expression = p.parseExpression(LOWEST)
 
-    if p.peekTokenIs(token.SEMICOLON) {
-        p.nextToken()
-    }
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
 
-    return stmt
+	return stmt
 }
 func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 	stmt := &ast.ReturnStatement{Token: p.curToken}
