@@ -6,14 +6,26 @@ import (
 	"interpreter/lexer"
 	"interpreter/token"
 )
-
+type (
+	prefixParseFn func() ast.Expression // pratt parser prefix parsing functions
+	infixParseFn func(ast.Expression) ast.Expression  // pratt parser infix parsing functions
+)
 type Parser struct {
 	l         *lexer.Lexer
 	curToken  token.Token
 	peekToken token.Token
 	errors    []string
+	// heere we just check if the appropriate map has a parsing fn 
+	// associated with curToken.Type 
+	prefixParseFns map[token.TokenType]prefixParseFn
+	infixParseFns map[token.TokenType]infixParseFn
 }
-
+func (p *Parser) registerPrefix(tokenType token.TokenType, fn prefixParseFn) {
+	p.prefixParseFns[tokenType] = fn
+}
+func (p *Parser) registerInfix(tokenType token.TokenType, fn infixParseFn) {
+	p.infixParseFns[tokenType] = fn
+}
 func New(l *lexer.Lexer) *Parser {
 	p := &Parser{l: l, errors: make([]string, 0)}
 	// read two tokens so curToken and peekToken are both set with tokens
