@@ -5,6 +5,7 @@ import (
 	"interpreter/ast"
 	"interpreter/lexer"
 	"interpreter/token"
+	"strconv"
 )
 
 const (
@@ -27,7 +28,7 @@ type Parser struct {
 	curToken  token.Token
 	peekToken token.Token
 	errors    []string
-	// heere we just check if the appropriate map has a parsing fn
+	// here we just check if the appropriate map has a parsing fn
 	// associated with curToken.Type
 	prefixParseFns map[token.TokenType]prefixParseFn
 	infixParseFns  map[token.TokenType]infixParseFn
@@ -43,6 +44,7 @@ func New(l *lexer.Lexer) *Parser {
 	p := &Parser{l: l, errors: make([]string, 0)}
 	p.prefixParseFns = make(map[token.TokenType]prefixParseFn)
 	p.registerPrefix(token.IDENT, p.parseIdentifier)
+	p.registerPrefix(token.INT, p.parseIntegerLiteral)
 	// read two tokens so curToken and peekToken are both set with tokens
 	p.nextToken()
 	p.nextToken()
@@ -83,6 +85,20 @@ func (p *Parser) parseStatement() ast.Statement {
 		return p.parseExpressionStatement()
 	}
 
+}
+func (p *Parser) parseIntegerLiteral() ast.Expression {
+	lit := &ast.IntegerLiteral{Token: p.curToken}
+
+	value, err := strconv.ParseInt(p.curToken.Literal, 0, 64)
+
+	if err != nil {
+		msg := fmt.Sprintf("could not parse %q as integer", p.curToken.Literal)
+
+		p.errors = append(p.errors, msg)
+		return nil
+	}
+	lit.Value = value
+	return lit
 }
 func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
 	stmt := &ast.ExpressionStatement{Token: p.curToken}
