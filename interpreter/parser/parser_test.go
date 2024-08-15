@@ -141,7 +141,6 @@ func TestIntegerLiteralExpression(t *testing.T) {
     p := New(l)
     program := p.ParseProgram()
     checkParseErrors(t, p)
-
     if len(program.Statements) != 1 {
         t.Fatalf("program has not enough statements. got=%d",
             len(program.Statements))
@@ -151,9 +150,8 @@ func TestIntegerLiteralExpression(t *testing.T) {
         t.Fatalf("program.Statements[0] is not ast.ExpressionStatement. got=%T",
             program.Statements[0])
     }
-
     literal, ok := stmt.Expression.(*ast.IntegerLiteral)
-    if !ok {
+	if !ok {
         t.Fatalf("exp not *ast.IntegerLiteral. got=%T", stmt.Expression)
     }
     if literal.Value != 5 {
